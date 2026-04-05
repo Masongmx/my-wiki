@@ -4,10 +4,9 @@
 import streamlit as st
 from pathlib import Path
 import re
-
-
-def get_kb_root():
-    return Path("/mnt/d/knowledge-base")
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils import get_kb_root
 
 
 def get_file_list(directory):

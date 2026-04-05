@@ -8,10 +8,9 @@ import os
 import re
 import subprocess
 from openai import OpenAI
-
-
-def get_kb_root():
-    return Path("/mnt/d/knowledge-base")
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils import get_kb_root
 
 
 def load_config():

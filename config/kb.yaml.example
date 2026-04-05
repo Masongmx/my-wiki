@@ -2,26 +2,18 @@
 # Copy this file to config/kb.yaml and fill in your values
 
 knowledge_base:
-  root: /path/to/your/knowledge-base
+  # 数据目录（存放 raw/、wiki/）
+  # 可以是绝对路径，如：/path/to/your/knowledge-base
+  data_dir: ./data
   
-  # Directory structure
+  # 或者指定外部数据目录
+  # data_dir: /mnt/d/knowledge-base
+  
+  # 目录结构（相对于 data_dir）
   raw_dir: raw
   wiki_dir: wiki
   
-  # Subdirectories
-  raw_subdirs:
-    articles: raw/articles
-    pdfs: raw/pdfs
-    transcripts: raw/transcripts
-    assets: raw/assets
-  
-  wiki_subdirs:
-    concepts: wiki/concepts
-    entities: wiki/entities
-    sources: wiki/sources
-    outputs: wiki/outputs
-  
-  # Index and logs
+  # 索引和日志
   index_file: wiki/_index.md
   log_file: wiki/_meta/log.md
 
@@ -32,7 +24,7 @@ llm:
   # Model name
   model: gpt-4o-mini
   
-  # API key (or set environment variable)
+  # API key (or set environment variable OPENAI_API_KEY)
   # api_key: sk-xxx
   
   # Base URL (optional, for custom endpoints)

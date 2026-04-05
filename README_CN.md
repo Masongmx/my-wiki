@@ -75,7 +75,11 @@ pip install click pyyaml loguru openai
 
 ```yaml
 knowledge_base:
-  root: /path/to/your/knowledge-base
+  # 数据目录（存放 raw/、wiki/）
+  data_dir: ./data
+  
+  # 或使用绝对路径指向外部目录
+  # data_dir: /path/to/your/knowledge-base
   
 llm:
   provider: openai  # 或 bailian、anthropic 等
@@ -83,6 +87,11 @@ llm:
   api_key: YOUR_API_KEY  # 或设置环境变量
   base_url: https://api.openai.com/v1  # 可选
 ```
+
+**支持外部数据目录**：
+- 可以把数据目录放在项目外部
+- 多个环境共享同一份数据
+- 方便备份和迁移
 
 ### 初始化
 

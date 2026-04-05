@@ -73,3 +73,6 @@ key.txt
 .obsidian/
 .smart-env/
 .git/
+
+# User config (use kb.yaml.example as template)
+config/kb.yaml

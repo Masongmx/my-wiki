@@ -3,23 +3,7 @@
 
 import streamlit as st
 from pathlib import Path
-import yaml
-
-
-def load_config():
-    """加载配置"""
-    kb_root = Path("/mnt/d/knowledge-base")
-    config_path = kb_root / "config" / "kb.yaml"
-    
-    if config_path.exists():
-        with open(config_path, "r", encoding="utf-8") as f:
-            return yaml.safe_load(f)
-    return {}
-
-
-def get_kb_root():
-    """获取知识库根目录"""
-    return Path("/mnt/d/knowledge-base")
+from utils import load_config, get_kb_root
 
 
 def main():
