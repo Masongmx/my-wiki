@@ -33,10 +33,10 @@ dependencies = [
 wiki = "wiki.cli:cli"
 
 [project.urls]
-Homepage = "https://github.com/YOUR_USERNAME/my-wiki"
-Documentation = "https://github.com/YOUR_USERNAME/my-wiki#readme"
-Repository = "https://github.com/YOUR_USERNAME/my-wiki"
-Issues = "https://github.com/YOUR_USERNAME/my-wiki/issues"
+Homepage = "https://github.com/Masongmx/my-wiki"
+Documentation = "https://github.com/Masongmx/my-wiki#readme"
+Repository = "https://github.com/Masongmx/my-wiki"
+Issues = "https://github.com/Masongmx/my-wiki/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]

@@ -59,7 +59,7 @@ My Wiki:
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/my-wiki.git
+git clone https://github.com/Masongmx/my-wiki.git
 cd my-wiki
 
 # Install dependencies
