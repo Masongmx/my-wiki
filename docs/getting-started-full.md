@@ -624,7 +624,7 @@ My Wiki 的独特价值：
 - **GitHub 仓库**：https://github.com/Masongmx/my-wiki
 - **中文文档**：README_CN.md
 - **英文文档**：README.md
-- **飞书介绍**：https://feishu.cn/docx/T2oCdiNhZojOkCx627TcgnmSnXc
+- **快速开始**：docs/getting-started.md
 
 ---
 
