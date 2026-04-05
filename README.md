@@ -4,6 +4,9 @@
     <strong>LLM-powered Personal Knowledge Base</strong>
   </p>
   <p align="center">
+    <a href="README_CN.md">中文</a> | <a href="README.md">English</a>
+  </p>
+  <p align="center">
     <a href="#features">Features</a> •
     <a href="#quick-start">Quick Start</a> •
     <a href="#usage">Usage</a> •

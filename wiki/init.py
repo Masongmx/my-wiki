@@ -87,8 +87,8 @@ def init(path):
 Next steps:
 1. Create config/kb.yaml (see config/kb.yaml.example)
 2. Add articles to raw/articles/
-3. Run: kb ingest raw/articles/your-article.md
-4. Query: kb query "your question"
+3. Run: wiki ingest raw/articles/your-article.md
+4. Query: wiki query "your question"
 """)
 
 

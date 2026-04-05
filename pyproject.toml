@@ -9,7 +9,7 @@ description = "LLM-powered Personal Knowledge Base"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "Your Name", email = "your@email.com"}
+    {name = "My Wiki Contributors"}
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
