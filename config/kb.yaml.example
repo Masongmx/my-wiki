@@ -1,0 +1,61 @@
+# Knowledge Base Configuration Template
+# Copy this file to config/kb.yaml and fill in your values
+
+knowledge_base:
+  root: /path/to/your/knowledge-base
+  
+  # Directory structure
+  raw_dir: raw
+  wiki_dir: wiki
+  
+  # Subdirectories
+  raw_subdirs:
+    articles: raw/articles
+    pdfs: raw/pdfs
+    transcripts: raw/transcripts
+    assets: raw/assets
+  
+  wiki_subdirs:
+    concepts: wiki/concepts
+    entities: wiki/entities
+    sources: wiki/sources
+    outputs: wiki/outputs
+  
+  # Index and logs
+  index_file: wiki/_index.md
+  log_file: wiki/_meta/log.md
+
+llm:
+  # Provider: openai, bailian, anthropic
+  provider: openai
+  
+  # Model name
+  model: gpt-4o-mini
+  
+  # API key (or set environment variable)
+  # api_key: sk-xxx
+  
+  # Base URL (optional, for custom endpoints)
+  # base_url: https://api.openai.com/v1
+  
+  # For complex tasks, use a stronger model
+  complex_model: gpt-4o
+
+lint:
+  # Enable/disable checks
+  check_missing_pages: true
+  check_orphans: true
+  check_contradictions: true
+  check_outdated: true
+  
+  # Days before content is considered outdated
+  outdated_days: 365
+  
+  # Directories to exclude
+  exclude_dirs:
+    - .obsidian
+    - .git
+    - __pycache__
+
+logging:
+  level: INFO

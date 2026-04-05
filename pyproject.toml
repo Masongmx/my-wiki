@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "my-wiki"
+version = "0.1.0"
+description = "LLM-powered Personal Knowledge Base"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Your Name", email = "your@email.com"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "click>=8.0.0",
+    "pyyaml>=6.0",
+    "loguru>=0.6.0",
+    "openai>=1.0.0",
+]
+
+[project.scripts]
+wiki = "wiki.cli:cli"
+
+[project.urls]
+Homepage = "https://github.com/YOUR_USERNAME/my-wiki"
+Documentation = "https://github.com/YOUR_USERNAME/my-wiki#readme"
+Repository = "https://github.com/YOUR_USERNAME/my-wiki"
+Issues = "https://github.com/YOUR_USERNAME/my-wiki/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["wiki*"]
