@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "my-wiki"
-version = "0.1.0"
+version = "2.0.0"
 description = "LLM-powered Personal Knowledge Base"
 readme = "README.md"
 license = {text = "MIT"}
