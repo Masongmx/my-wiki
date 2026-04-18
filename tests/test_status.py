@@ -67,9 +67,9 @@ class TestRecentLogs:
         logs = status.read_recent_logs(sample_log_file, limit=5)
 
         assert len(logs) == 3
-        # Logs are returned in reverse order (oldest first after reversal)
-        assert logs[0]["action"] == "delete"  # Oldest is "delete" in sample_log_file
-        assert logs[0]["file"] == "wiki/sources/test.md"
+        # Logs are returned in reverse order (newest first)
+        assert logs[0]["action"] == "delete"  # Newest is "delete" in sample_log_file
+        assert logs[0]["file"] == "wiki/sources/old.md"
 
     def test_read_recent_logs_empty(self, mock_kb_root):
         """Test reading from empty log file"""
