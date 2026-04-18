@@ -120,7 +120,7 @@ def status(config: Optional[str], recent: bool, sources: bool, verbose: bool):
     setup_logging("DEBUG" if verbose else "INFO")
     
     cfg = load_config(Path(config) if config else None)
-    kb_root = Path(cfg["knowledge_base"]["root"])
+    kb_root = Path(cfg["knowledge_base"].get("root") or cfg["knowledge_base"].get("data_dir", "./data"))
     
     # 统计信息
     stats = get_kb_stats(kb_root)
