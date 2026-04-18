@@ -12,10 +12,9 @@ from pathlib import Path
 from loguru import logger
 import re
 from datetime import datetime
-from typing import Optional, List
 
 
-def setup_logging(level: str = "INFO"):
+def setup_logging(level: str = "INFO") -> None:
     logger.remove()
     logger.add(
         sink=lambda msg: click.echo(msg, nl=False),
@@ -25,7 +24,7 @@ def setup_logging(level: str = "INFO"):
     )
 
 
-def load_config(config_path: Optional[Path] = None) -> dict:
+def load_config(config_path: Path | None = None) -> dict[str, str]:
     """加载配置"""
     if config_path is None:
         kb_root = Path(__file__).parent.parent
@@ -45,7 +44,7 @@ def count_files(directory: Path) -> int:
     return len(list(directory.glob("*.md")))
 
 
-def get_file_list(directory: Path, limit: int = 10) -> List[str]:
+def get_file_list(directory: Path, limit: int = 10) -> list[str]:
     """获取文件列表"""
     if not directory.exists():
         return []
@@ -54,7 +53,7 @@ def get_file_list(directory: Path, limit: int = 10) -> List[str]:
     return [f.stem for f in files[:limit]]
 
 
-def read_recent_logs(log_file: Path, limit: int = 5) -> List[dict]:
+def read_recent_logs(log_file: Path, limit: int = 5) -> list[dict[str, str]]:
     """读取最近操作日志"""
     if not log_file.exists():
         return []
@@ -84,7 +83,7 @@ def read_recent_logs(log_file: Path, limit: int = 5) -> List[dict]:
         return []
 
 
-def get_kb_stats(kb_root: Path) -> dict:
+def get_kb_stats(kb_root: Path) -> dict[str, int]:
     """获取知识库统计"""
     stats = {
         "sources": count_files(kb_root / "wiki" / "sources"),
@@ -109,7 +108,7 @@ def get_kb_stats(kb_root: Path) -> dict:
 @click.option("--recent", "-r", is_flag=True, help="显示最近操作")
 @click.option("--sources", "-s", is_flag=True, help="显示来源列表")
 @click.option("--verbose", "-v", is_flag=True, help="详细输出")
-def status(config: Optional[str], recent: bool, sources: bool, verbose: bool):
+def status(config: str | None, recent: bool, sources: bool, verbose: bool) -> None:
     """知识库状态
     
     用法：

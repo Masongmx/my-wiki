@@ -6,7 +6,7 @@ from pathlib import Path
 from utils import load_config, get_kb_root
 
 
-def main():
+def main() -> None:
     st.set_page_config(
         page_title="My Wiki",
         page_icon="📚",

@@ -12,12 +12,12 @@ import re
 import json
 from pathlib import Path
 from datetime import datetime
-from typing import Optional, Dict, Any
+from typing import Any
 import urllib.request
 import urllib.parse
 
 
-def detect_platform(url: str) -> Optional[str]:
+def detect_platform(url: str) -> str | None:
     """识别链接平台类型"""
     if "x.com" in url or "twitter.com" in url:
         return "twitter"
@@ -31,13 +31,13 @@ def detect_platform(url: str) -> Optional[str]:
         return "web"
 
 
-def extract_tweet_id(url: str) -> Optional[str]:
+def extract_tweet_id(url: str) -> str | None:
     """从Twitter URL提取推文ID"""
     match = re.search(r"status/(\d+)", url)
     return match.group(1) if match else None
 
 
-def fetch_tweet(tweet_id: str) -> Dict[str, Any]:
+def fetch_tweet(tweet_id: str) -> dict[str, Any]:
     """抓取Twitter推文（使用FxTwitter API）"""
     url = f"https://api.fxtwitter.com/status/{tweet_id}"
     
@@ -65,7 +65,7 @@ def fetch_tweet(tweet_id: str) -> Dict[str, Any]:
         return {"success": False, "error": str(e)}
 
 
-def extract_weibo_ids(url: str) -> Optional[tuple]:
+def extract_weibo_ids(url: str) -> tuple[str, str] | None:
     """从微博URL提取ID"""
     # https://weibo.com/uid/bid
     match = re.search(r"weibo\.com/(\d+)/(\w+)", url)
@@ -80,7 +80,7 @@ def extract_weibo_ids(url: str) -> Optional[tuple]:
     return None
 
 
-def fetch_weibo(post_id: str) -> Dict[str, Any]:
+def fetch_weibo(post_id: str) -> dict[str, Any]:
     """抓取微博（使用移动API）"""
     url = f"https://m.weibo.cn/statuses/extend?id={post_id}"
     
@@ -112,7 +112,7 @@ def fetch_weibo(post_id: str) -> Dict[str, Any]:
         return {"success": False, "error": str(e)}
 
 
-def fetch_web(url: str) -> Dict[str, Any]:
+def fetch_web(url: str) -> dict[str, Any]:
     """抓取通用网页"""
     headers = {"User-Agent": "Mozilla/5.0"}
     
@@ -146,7 +146,7 @@ def fetch_web(url: str) -> Dict[str, Any]:
 @click.argument("url")
 @click.option("--save", is_flag=True, help="保存到raw目录")
 @click.pass_obj
-def fetch(config: dict, url: str, save: bool):
+def fetch(config: dict, url: str, save: bool) -> None:
     """抓取链接内容
     
     \b

@@ -17,11 +17,11 @@ import re
 import json
 import hashlib
 from datetime import datetime, timedelta
-from typing import Optional, List, Dict, Any
+from typing import Any
 from collections import defaultdict
 
 
-def setup_logging(level: str = "INFO"):
+def setup_logging(level: str = "INFO") -> None:
     logger.remove()
     logger.add(
         sink=lambda msg: click.echo(msg, nl=False),
@@ -31,7 +31,7 @@ def setup_logging(level: str = "INFO"):
     )
 
 
-def load_config(config_path: Optional[Path] = None) -> dict:
+def load_config(config_path: Path | None = None) -> dict:
     """加载配置"""
     if config_path is None:
         kb_root = Path(__file__).parent.parent
@@ -44,7 +44,7 @@ def load_config(config_path: Optional[Path] = None) -> dict:
         return yaml.safe_load(f)
 
 
-def find_markdown_files(kb_root: Path, exclude_dirs: List[str]) -> List[Path]:
+def find_markdown_files(kb_root: Path, exclude_dirs: list[str]) -> list[Path]:
     """查找所有 Markdown 文件"""
     files = []
     
@@ -57,7 +57,7 @@ def find_markdown_files(kb_root: Path, exclude_dirs: List[str]) -> List[Path]:
     return files
 
 
-def build_file_index(kb_root: Path, exclude_dirs: List[str]) -> Dict[str, Path]:
+def build_file_index(kb_root: Path, exclude_dirs: list[str]) -> dict[str, Path]:
     """构建文件名索引"""
     index = {}
     
@@ -71,7 +71,7 @@ def build_file_index(kb_root: Path, exclude_dirs: List[str]) -> Dict[str, Path]:
     return index
 
 
-def extract_links(file_path: Path) -> Dict[str, List[str]]:
+def extract_links(file_path: Path) -> dict[str, list[str]]:
     """提取链接"""
     links = {
         "wiki_links": [],
@@ -106,7 +106,7 @@ def extract_links(file_path: Path) -> Dict[str, List[str]]:
     return links
 
 
-def resolve_link(kb_root: Path, link: str, index: Dict[str, Path] = None) -> Optional[Path]:
+def resolve_link(kb_root: Path, link: str, index: dict[str, Path] | None = None) -> Path | None:
     """解析链接"""
     if index and link in index:
         return index[link]
@@ -118,8 +118,8 @@ def resolve_link(kb_root: Path, link: str, index: Dict[str, Path] = None) -> Opt
     return None
 
 
-def check_broken_links(kb_root: Path, files: List[Path], 
-                       index: Dict[str, Path]) -> Dict[str, Any]:
+def check_broken_links(kb_root: Path, files: list[Path],
+                       index: dict[str, Path]) -> dict[str, Any]:
     """检查缺失页（死链）"""
     results = {
         "total_links": 0,
@@ -181,8 +181,8 @@ def check_broken_links(kb_root: Path, files: List[Path],
     return results
 
 
-def check_orphans(kb_root: Path, files: List[Path], 
-                  index: Dict[str, Path]) -> Dict[str, Any]:
+def check_orphans(kb_root: Path, files: list[Path],
+                  index: dict[str, Path]) -> dict[str, Any]:
     """检查孤立页"""
     results = {
         "total_files": len(files),
@@ -221,7 +221,7 @@ def check_orphans(kb_root: Path, files: List[Path],
     return results
 
 
-def check_contradictions(kb_root: Path, files: List[Path]) -> Dict[str, Any]:
+def check_contradictions(kb_root: Path, files: list[Path]) -> dict[str, Any]:
     """检查矛盾（概念定义不一致）"""
     results = {
         "contradictions": []
@@ -276,7 +276,7 @@ def check_contradictions(kb_root: Path, files: List[Path]) -> Dict[str, Any]:
     return results
 
 
-def check_outdated(kb_root: Path, days: int = 365) -> Dict[str, Any]:
+def check_outdated(kb_root: Path, days: int = 365) -> dict[str, Any]:
     """检查过时内容"""
     results = {
         "outdated": []
@@ -314,7 +314,7 @@ def check_outdated(kb_root: Path, days: int = 365) -> Dict[str, Any]:
     return results
 
 
-def check_log_format(kb_root: Path) -> Dict[str, Any]:
+def check_log_format(kb_root: Path) -> dict[str, Any]:
     """检查日志格式"""
     results = {
         "issues": []
@@ -342,7 +342,7 @@ def check_log_format(kb_root: Path) -> Dict[str, Any]:
     return results
 
 
-def generate_report(kb_root: Path, results: Dict[str, Any]) -> str:
+def generate_report(kb_root: Path, results: dict[str, Any]) -> str:
     """生成 lint 报告"""
     report = f"""---
 date: {datetime.now().strftime('%Y-%m-%d')}
@@ -424,7 +424,7 @@ total_issues: {sum(len(r) for r in results.values() if isinstance(r, list))}
 @click.option("--links", is_flag=True, help="只检查死链")
 @click.option("--outdated", is_flag=True, help="只检查过时内容")
 @click.option("--verbose", "-v", is_flag=True, help="详细输出")
-def lint(config: Optional[str], quick: bool, fix: bool, 
+def lint(config: str | None, quick: bool, fix: bool,
          orphans: bool, links: bool, outdated: bool, verbose: bool):
     """健康检查
     

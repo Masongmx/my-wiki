@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """kb init: Initialize knowledge base directory structure"""
 
-import os
 from pathlib import Path
 import click
 
 
-def create_directory_structure(kb_root: Path):
+def create_directory_structure(kb_root: Path) -> int:
     """Create the standard knowledge base directory structure."""
     
     directories = [
@@ -66,7 +65,7 @@ _Log created: pending_
 
 @click.command()
 @click.option('--path', default='.', help='Path to create knowledge base (default: current directory)')
-def init(path):
+def init(path: str) -> None:
     """Initialize knowledge base directory structure.
     
     Creates raw/, wiki/, and config/ directories with proper structure.

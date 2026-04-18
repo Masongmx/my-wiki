@@ -28,7 +28,7 @@ from typing import Optional, Dict, Any, List
 from openai import OpenAI
 
 # 配置日志
-def setup_logging(level: str = "INFO"):
+def setup_logging(level: str = "INFO") -> None:
     logger.remove()
     logger.add(
         sink=lambda msg: click.echo(msg, nl=False),
@@ -38,7 +38,7 @@ def setup_logging(level: str = "INFO"):
     )
 
 
-def load_config(config_path: Optional[Path] = None) -> dict:
+def load_config(config_path: Optional[Path] = None) -> Dict[str, Any]:
     """加载配置文件"""
     if config_path is None:
         kb_root = Path(__file__).parent.parent
@@ -51,7 +51,7 @@ def load_config(config_path: Optional[Path] = None) -> dict:
         return yaml.safe_load(f)
 
 
-def get_api_key(config: dict) -> str:
+def get_api_key(config: Dict[str, Any]) -> str:
     """从配置或 key.txt 获取 API key"""
     kb_root = Path(config["knowledge_base"]["root"])
     
@@ -77,7 +77,7 @@ def get_api_key(config: dict) -> str:
     raise ValueError("找不到 API key（检查 key.txt 或 litellm_config.yaml）")
 
 
-def get_llm_client(config: dict) -> tuple:
+def get_llm_client(config: Dict[str, Any]) -> tuple[OpenAI, str]:
     """获取 LLM 客户端"""
     api_key = get_api_key(config)
     llm_config = config["llm"]
@@ -106,7 +106,7 @@ def load_state(kb_root: Path) -> Dict[str, Any]:
     return {"files": {}, "last_run": None}
 
 
-def save_state(kb_root: Path, state: Dict[str, Any]):
+def save_state(kb_root: Path, state: Dict[str, Any]) -> None:
     """保存处理状态"""
     state_file = kb_root / ".ingest_state.json"
     state["last_run"] = datetime.now().isoformat()
@@ -169,7 +169,7 @@ def extract_metadata(content: str) -> Dict[str, Any]:
     return metadata
 
 
-def llm_extract_source(client, model: str, content: str, filename: str) -> Dict[str, Any]:
+def llm_extract_source(client: OpenAI, model: str, content: str, filename: str) -> Optional[Dict[str, Any]]:
     """调用 LLM 提取来源页内容"""
     
     # JSON 示例（单独定义，避免 f-string 大括号冲突）
@@ -244,7 +244,7 @@ def safe_filename(name: str) -> str:
     return safe.strip('-')
 
 
-def write_source_page(kb_root: Path, source: dict, raw_file: Path, source_type: str, metadata: dict):
+def write_source_page(kb_root: Path, source: Dict[str, Any], raw_file: Path, source_type: str, metadata: Dict[str, Any]) -> str:
     """写入 sources/ 页面"""
     sources_dir = kb_root / "wiki" / "sources"
     sources_dir.mkdir(parents=True, exist_ok=True)
@@ -310,7 +310,7 @@ url: {metadata.get('url', '')}
     return filename
 
 
-def write_concept_page(kb_root: Path, concept: dict, source_file: str):
+def write_concept_page(kb_root: Path, concept: Dict[str, Any], source_file: str) -> str:
     """写入 concepts/ 页面"""
     concepts_dir = kb_root / "wiki" / "concepts"
     concepts_dir.mkdir(parents=True, exist_ok=True)
@@ -395,7 +395,7 @@ status: stable
     return filename
 
 
-def write_entity_page(kb_root: Path, entity: dict, source_file: str):
+def write_entity_page(kb_root: Path, entity: Dict[str, Any], source_file: str) -> str:
     """写入 entities/ 页面"""
     entities_dir = kb_root / "wiki" / "entities"
     entities_dir.mkdir(parents=True, exist_ok=True)
@@ -478,7 +478,7 @@ status: stable
     return filename
 
 
-def update_reverse_links(kb_root: Path, concept_files: List[str], entity_files: List[str], source_file: str):
+def update_reverse_links(kb_root: Path, concept_files: List[str], entity_files: List[str], source_file: str) -> None:
     """更新反向引用"""
     # 更新概念的 "反向引用" 部分
     concepts_dir = kb_root / "wiki" / "concepts"
@@ -512,7 +512,7 @@ def update_reverse_links(kb_root: Path, concept_files: List[str], entity_files: 
                         f.write(new_content)
 
 
-def update_index(kb_root: Path):
+def update_index(kb_root: Path) -> None:
     """更新 _index.md"""
     index_file = kb_root / "wiki" / "_index.md"
     
@@ -626,9 +626,9 @@ def update_index(kb_root: Path):
     logger.success("更新 wiki/_index.md")
 
 
-def write_log(kb_root: Path, raw_file: Path, source_file: str, 
-              concepts: List[str], entities: List[str], 
-              status: str = "完成", elapsed: float = 0):
+def write_log(kb_root: Path, raw_file: Path, source_file: str,
+              concepts: List[str], entities: List[str],
+              status: str = "完成", elapsed: float = 0) -> None:
     """写入操作日志"""
     log_file = kb_root / "wiki" / "_meta" / "log.md"
     log_file.parent.mkdir(parents=True, exist_ok=True)
@@ -675,8 +675,8 @@ def write_log(kb_root: Path, raw_file: Path, source_file: str,
 @click.option("--dry-run", "-d", is_flag=True, help="预览不写入")
 @click.option("--force", "-f", is_flag=True, help="强制重新处理")
 @click.option("--verbose", "-v", is_flag=True, help="详细输出")
-def ingest(file: Optional[str], config: Optional[str], 
-           batch: bool, dry_run: bool, force: bool, verbose: bool):
+def ingest(file: Optional[str], config: Optional[str],
+           batch: bool, dry_run: bool, force: bool, verbose: bool) -> None:
     """处理 raw/ 素材到 wiki/
     
     用法：

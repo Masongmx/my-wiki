@@ -17,11 +17,11 @@ import json
 import re
 import subprocess
 from datetime import datetime
-from typing import Optional, List, Dict, Any
+from typing import Any
 from openai import OpenAI
 
 
-def setup_logging(level: str = "INFO"):
+def setup_logging(level: str = "INFO") -> None:
     logger.remove()
     logger.add(
         sink=lambda msg: click.echo(msg, nl=False),
@@ -31,7 +31,7 @@ def setup_logging(level: str = "INFO"):
     )
 
 
-def load_config(config_path: Optional[Path] = None) -> dict:
+def load_config(config_path: Path | None = None) -> dict[str, Any]:
     """加载配置文件"""
     if config_path is None:
         kb_root = Path(__file__).parent.parent
@@ -44,7 +44,7 @@ def load_config(config_path: Optional[Path] = None) -> dict:
         return yaml.safe_load(f)
 
 
-def get_api_key(config: dict) -> str:
+def get_api_key(config: dict[str, Any]) -> str:
     """获取 API key"""
     kb_root = Path(config["knowledge_base"]["root"])
     
@@ -67,7 +67,7 @@ def get_api_key(config: dict) -> str:
     raise ValueError("找不到 API key")
 
 
-def get_llm_client(config: dict) -> tuple:
+def get_llm_client(config: dict[str, Any]) -> tuple[OpenAI, str]:
     """获取 LLM 客户端"""
     api_key = get_api_key(config)
     llm_config = config["llm"]
@@ -106,7 +106,7 @@ def classify_question(query: str) -> str:
     return "explore"
 
 
-def extract_keywords(query: str) -> List[str]:
+def extract_keywords(query: str) -> list[str]:
     """提取关键词"""
     # 常见问题词
     question_words = [
@@ -136,7 +136,7 @@ def extract_keywords(query: str) -> List[str]:
     return keywords if keywords else [cleaned[:15]]
 
 
-def search_files(kb_root: Path, keywords: List[str], limit: int = 5) -> List[Path]:
+def search_files(kb_root: Path, keywords: list[str], limit: int = 5) -> list[Path]:
     """搜索相关文件"""
     exclude_dirs = [".obsidian", ".smart-env", ".git", ".venv", "node_modules", "__pycache__"]
     
@@ -180,7 +180,7 @@ def search_files(kb_root: Path, keywords: List[str], limit: int = 5) -> List[Pat
     return [f[1] for f in scored[:limit]]
 
 
-def _grep_search(directory: Path, term: str, exclude_dirs: List[str]) -> set:
+def _grep_search(directory: Path, term: str, exclude_dirs: list[str]) -> set[Path]:
     """grep 搜索"""
     results = set()
     
@@ -232,8 +232,13 @@ def read_file_content(file_path: Path, max_length: int = 2000) -> str:
         return ""
 
 
-def generate_answer(client, model: str, query: str, contexts: List[Dict], 
-                    question_type: str) -> str:
+def generate_answer(
+    client: OpenAI,
+    model: str,
+    query: str,
+    contexts: list[dict[str, str]],
+    question_type: str
+) -> str:
     """生成答案"""
     if not contexts:
         return "抱歉，没有找到相关内容。"
@@ -331,8 +336,13 @@ def generate_answer(client, model: str, query: str, contexts: List[Dict],
         return f"生成答案时出错: {e}"
 
 
-def save_output(kb_root: Path, query: str, answer: str, 
-                sources: List[str], question_type: str):
+def save_output(
+    kb_root: Path,
+    query: str,
+    answer: str,
+    sources: list[str],
+    question_type: str
+) -> None:
     """保存可复用答案到 outputs/"""
     outputs_dir = kb_root / "wiki" / "outputs"
     outputs_dir.mkdir(parents=True, exist_ok=True)
@@ -394,8 +404,14 @@ def should_save_output(question_type: str, answer: str) -> bool:
 @click.option("--format", "-f", type=click.Choice(["text", "table", "markdown"]), 
               default="markdown", help="输出格式")
 @click.option("--verbose", "-v", is_flag=True, help="详细输出")
-def query(query: str, config: Optional[str], limit: int, 
-          save: bool, format: str, verbose: bool):
+def query(
+    query: str,
+    config: str | None,
+    limit: int,
+    save: bool,
+    format: str,
+    verbose: bool
+) -> None:
     """查询知识库
     
     用法：

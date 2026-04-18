@@ -9,35 +9,39 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from utils import get_kb_root
 
 
-def get_upload_dir(category):
+def get_upload_dir(category: str) -> Path:
     """获取上传目录"""
     kb_root = get_kb_root()
-    
+
     dirs = {
         "articles": kb_root / "raw" / "articles",
         "pdfs": kb_root / "pdfs",
         "transcripts": kb_root / "raw" / "transcripts",
         "assets": kb_root / "raw" / "assets",
     }
-    
+
     return dirs.get(category, kb_root / "raw" / "articles")
 
 
-def save_uploaded_file(uploaded_file, target_dir, filename=None):
+def save_uploaded_file(
+    uploaded_file,
+    target_dir: Path,
+    filename: str | None = None
+) -> Path:
     """保存上传的文件"""
     if not filename:
         filename = uploaded_file.name
-    
+
     target_path = target_dir / filename
     target_dir.mkdir(parents=True, exist_ok=True)
-    
+
     with open(target_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
-    
+
     return target_path
 
 
-def main():
+def main() -> None:
     st.set_page_config(
         page_title="Upload - My Wiki",
         page_icon="📤",

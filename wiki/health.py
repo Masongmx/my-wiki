@@ -14,11 +14,10 @@ import click
 import sys
 import subprocess
 from pathlib import Path
-from typing import Dict, List, Any
 import json
 
 
-def check_python_version() -> Dict[str, Any]:
+def check_python_version() -> dict[str, str | None]:
     """检查Python版本"""
     version = sys.version_info
     return {
@@ -28,7 +27,7 @@ def check_python_version() -> Dict[str, Any]:
     }
 
 
-def check_dependency(package: str) -> Dict[str, Any]:
+def check_dependency(package: str) -> dict[str, str | None]:
     """检查Python依赖"""
     try:
         result = subprocess.run(
@@ -44,7 +43,7 @@ def check_dependency(package: str) -> Dict[str, Any]:
         return {"status": "❌", "message": f"{package} 检查失败", "detail": str(e)}
 
 
-def check_directory(dir_path: Path, name: str) -> Dict[str, Any]:
+def check_directory(dir_path: Path, name: str) -> dict[str, str | None]:
     """检查目录"""
     if dir_path.exists():
         count = len(list(dir_path.glob("*")))
@@ -53,7 +52,7 @@ def check_directory(dir_path: Path, name: str) -> Dict[str, Any]:
         return {"status": "❌", "message": f"{name} 不存在", "detail": str(dir_path)}
 
 
-def check_cache(raw_dir: Path) -> Dict[str, Any]:
+def check_cache(raw_dir: Path) -> dict[str, str | None]:
     """检查缓存"""
     cache_file = raw_dir / "_sync_cache.json"
     
@@ -76,7 +75,7 @@ def check_cache(raw_dir: Path) -> Dict[str, Any]:
         return {"status": "❌", "message": "缓存读取失败", "detail": str(e)}
 
 
-def check_backups(log_dir: Path) -> Dict[str, Any]:
+def check_backups(log_dir: Path) -> dict[str, str | None]:
     """检查备份"""
     backup_files = list(log_dir.glob("sync_cache_backup_*.json"))
     
@@ -91,7 +90,7 @@ def check_backups(log_dir: Path) -> Dict[str, Any]:
     }
 
 
-def get_kb_stats(raw_dir: Path, wiki_dir: Path) -> Dict[str, int]:
+def get_kb_stats(raw_dir: Path, wiki_dir: Path) -> dict[str, int]:
     """统计知识库"""
     raw_count = len(list(raw_dir.glob("*.md")))
     wiki_count = len(list(wiki_dir.glob("*.md")))
@@ -112,7 +111,7 @@ def get_kb_stats(raw_dir: Path, wiki_dir: Path) -> Dict[str, int]:
 
 @click.command()
 @click.pass_obj
-def health(config: dict):
+def health(config: dict) -> None:
     """一键诊断知识库状态
     
     \b

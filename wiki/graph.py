@@ -11,11 +11,11 @@
 import click
 import json
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
 import webbrowser
 
 
-def load_backlinks(wiki_dir: Path) -> Dict[str, List[str]]:
+def load_backlinks(wiki_dir: Path) -> dict[str, list[str]]:
     """加载反向链接数据"""
     backlinks_file = wiki_dir / "_backlinks.json"
     if not backlinks_file.exists():
@@ -25,7 +25,7 @@ def load_backlinks(wiki_dir: Path) -> Dict[str, List[str]]:
         return json.load(f)
 
 
-def extract_nodes_and_edges(backlinks: Dict[str, List[str]]) -> tuple:
+def extract_nodes_and_edges(backlinks: dict[str, list[str]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """提取节点和边数据"""
     nodes = []
     edges = []
@@ -63,7 +63,7 @@ def extract_nodes_and_edges(backlinks: Dict[str, List[str]]) -> tuple:
     return nodes, edges
 
 
-def generate_graph_html(nodes: List[Dict], edges: List[Dict], wiki_dir: Path) -> str:
+def generate_graph_html(nodes: list[dict[str, Any]], edges: list[dict[str, Any]], wiki_dir: Path) -> str:
     """生成图谱HTML"""
     
     # 按引用数排序，找出God Nodes（核心节点）
@@ -258,7 +258,7 @@ def generate_graph_html(nodes: List[Dict], edges: List[Dict], wiki_dir: Path) ->
 @click.command()
 @click.option("--open", "open_browser", is_flag=True, help="生成后打开浏览器")
 @click.pass_obj
-def graph(config: dict, open_browser: bool):
+def graph(config: dict, open_browser: bool) -> None:
     """生成交互式知识图谱
     
     \b
@@ -314,7 +314,7 @@ def graph(config: dict, open_browser: bool):
 @click.command()
 @click.option("--top", default=10, help="显示前N个核心节点")
 @click.pass_obj
-def god_nodes(config: dict, top: int):
+def god_nodes(config: dict, top: int) -> None:
     """显示核心节点（引用数最多的文章）
     
     \b

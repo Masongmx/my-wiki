@@ -10,17 +10,17 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from utils import get_kb_root
 
 
-def count_files(directory):
+def count_files(directory: Path) -> int:
     if directory.exists():
         return len(list(directory.glob("*.md")))
     return 0
 
 
-def get_file_list(directory, limit=10):
+def get_file_list(directory: Path, limit: int = 10) -> list[Path]:
     """获取文件列表（按修改时间排序）"""
     if not directory.exists():
         return []
-    
+
     files = sorted(
         directory.glob("*.md"),
         key=lambda f: f.stat().st_mtime,
@@ -29,38 +29,38 @@ def get_file_list(directory, limit=10):
     return files[:limit]
 
 
-def read_recent_logs(log_file, limit=10):
+def read_recent_logs(log_file: Path, limit: int = 10) -> list[tuple[str, str, str]]:
     """读取最近操作日志"""
     if not log_file.exists():
         return []
-    
+
     with open(log_file, "r", encoding="utf-8") as f:
         content = f.read()
-    
+
     entries = re.findall(
         r'##\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2})\s*\|\s*([^\|]+)\s*\|\s*([^\n]+)',
         content
     )
-    
+
     return entries[::-1][:limit]
 
 
-def check_health(kb_root):
+def check_health(kb_root: Path) -> int | None:
     """检查健康状态"""
     lint_file = kb_root / "wiki" / "_meta" / "lint-report.md"
-    
+
     if lint_file.exists():
         with open(lint_file, "r", encoding="utf-8") as f:
             content = f.read(500)
-        
+
         match = re.search(r'total_issues:\s*(\d+)', content)
         if match:
             return int(match.group(1))
-    
+
     return None
 
 
-def main():
+def main() -> None:
     st.set_page_config(
         page_title="Status - My Wiki",
         page_icon="📊",

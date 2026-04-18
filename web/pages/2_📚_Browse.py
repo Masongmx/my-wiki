@@ -9,63 +9,63 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from utils import get_kb_root
 
 
-def get_file_list(directory):
+def get_file_list(directory: Path) -> list[Path]:
     """获取文件列表"""
     if not directory.exists():
         return []
-    
+
     files = sorted(directory.glob("*.md"))
     return files
 
 
-def read_file_preview(file_path, max_length=500):
+def read_file_preview(file_path: Path, max_length: int = 500) -> tuple[str, str]:
     """读取文件预览"""
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
-        
+
         # 提取标题和定义/概览
         title_match = re.search(r'^#\s+([^\n]+)', content)
         title = title_match.group(1) if title_match else file_path.stem
-        
+
         # 提取定义或概览（前几行内容）
         preview_lines = []
         lines = content.split('\n')
-        
+
         # 跳过 frontmatter
         in_fm = False
         for line in lines:
             if line.strip() == '---':
                 in_fm = not in_fm
                 continue
-            
+
             if in_fm:
                 continue
-            
+
             # 跳过标题
             if line.startswith('#'):
                 continue
-            
+
             # 跳过空行
             if not line.strip():
                 continue
-            
+
             preview_lines.append(line)
-            
+
             if len(preview_lines) >= 5:
                 break
-        
+
         preview = '\n'.join(preview_lines)
-        
+
         if len(preview) > max_length:
             preview = preview[:max_length] + "..."
-        
+
         return title, preview
     except Exception as e:
         return file_path.stem, f"读取失败: {e}"
 
 
-def read_full_file(file_path):
+def read_full_file(file_path: Path) -> str:
     """读取完整文件"""
     try:
         with open(file_path, "r", encoding="utf-8") as f:
@@ -74,7 +74,7 @@ def read_full_file(file_path):
         return f"读取失败: {e}"
 
 
-def main():
+def main() -> None:
     st.set_page_config(
         page_title="Browse - My Wiki",
         page_icon="📚",

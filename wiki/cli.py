@@ -33,7 +33,7 @@ from health import health
 
 @click.group()
 @click.version_option(version="2.0.0")
-def cli():
+def cli() -> None:
     """Knowledge Base CLI | 知识库管理命令行工具
     
     \b

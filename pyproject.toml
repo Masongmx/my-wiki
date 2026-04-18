@@ -27,6 +27,8 @@ dependencies = [
     "pyyaml>=6.0",
     "loguru>=0.6.0",
     "openai>=1.0.0",
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
 ]
 
 [project.scripts]
@@ -41,3 +43,23 @@ Issues = "https://github.com/Masongmx/my-wiki/issues"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["wiki*"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --cov=wiki --cov-report=term-missing --cov-report=html"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.coverage.run]
+source = ["wiki"]
+omit = ["*/tests/*", "*/test_*.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
